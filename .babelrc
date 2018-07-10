@@ -1,0 +1,19 @@
+{
+  "presets": [
+    "react-native",
+    "react-native-dotenv"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-react-jsx-source",
+        [
+          "import",
+          {
+            "libraryName": "antd-mobile-rn"
+          }
+        ]
+      ]
+    }
+  }
+}
