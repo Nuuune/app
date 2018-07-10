@@ -42,7 +42,7 @@ export default class BookScreen extends React.Component {
       ImagePicker.showImagePicker({
         title: '选择头像'
       }, (res) => {
-        console.log('Response = ', response);
+        console.log('Response = ', res);
       })
      //  console.log('请求相册');
      //  CameraRoll.getPhotos({
