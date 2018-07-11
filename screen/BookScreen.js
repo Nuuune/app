@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import Util from '../Util';
 import HomeFrame from '../component/HomeFrame';
+import { Sline } from '../component/Line';
 import Service from '../api/Service';
 
 import FIcon from 'react-native-vector-icons/Feather';
@@ -88,6 +89,7 @@ export default class BookScreen extends React.Component {
           <HomeFrame
             title1="蓝灯HR"
             title2="通讯录"
+            searchTitle="联系"
             onReachEnd={this.reachEnd}>
             {/*分类*/}
             <View style={[styles.contain, {
@@ -96,7 +98,6 @@ export default class BookScreen extends React.Component {
               borderTopRightRadius: Util.px2dp(21),
               borderBottomWidth: Util.px2dp(1),
               borderBottomColor: '#deddde',
-              marginBottom: Util.px2dp(16),
               height: Util.px2dp(271)
             }]}>
               <View style={[styles.items1]}>
@@ -121,6 +122,7 @@ export default class BookScreen extends React.Component {
                 </View>
               </TouchableOpacity>
             </View>
+            <Sline height={Util.px2dp(16)} />
             {/*常见联系人列表*/}
             <View
             style={[styles.contain]}

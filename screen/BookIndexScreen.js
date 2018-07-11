@@ -12,6 +12,7 @@ import Util from '../Util';
 import Service from '../api/Service';
 import { fmt_depatment } from '../dataFmt';
 import SearchFrame from '../component/SearchFrame';
+import { Sline } from '../component/Line';
 // ejected need change import Icon from 'react-native-vector-icons/FontAwesome';
 import FIcon from 'react-native-vector-icons/Feather';
 
@@ -187,7 +188,7 @@ export default class BookIndexScreen extends React.Component {
             )
           }
 
-          <View style={{width: '100%', height: Util.px2dp(14), backgroundColor: '#eee'}}></View>
+          <Sline height={Util.px2dp(14)} />
 
           <View style={[styles.listHeader, {paddingHorizontal: Util.px2dp(42)}]}>
             <Text style={styles.listHeaderText}>{this.props.navigation.state.params.cate === 1 ? `企业` : ``}常用联系人</Text>

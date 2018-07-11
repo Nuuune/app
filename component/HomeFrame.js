@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, ScrollView, Dimensions } from 'react-native';
+import { Image, StyleSheet, View, ScrollView, Dimensions, FlatList, RefreshControl } from 'react-native';
 import Util from '../Util';
 import HomeHeader from './HomeHeader';
 import MySearchBar from './SearchBar';
@@ -10,13 +10,16 @@ export default class HomeFrame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            scrollH: 0
+          scrollH: 0,
+          reFreshing: false
         };
     }
 
     componentDidMount() {
 
     }
+
+
 
     _onScroll = (e) => {
       const y = e.nativeEvent.contentOffset.y;
@@ -33,14 +36,28 @@ export default class HomeFrame extends React.Component {
       }
     }
 
+    _onRefresh = () => {
+      this.setState({reFreshing: true});
+      if (this.props.onRefresh) {
+        this.props.onRefresh(this);
+      } else {
+        this.setState({reFreshing: false});
+      }
+      console.log('刷新');
+    }
+
+    onRefreshDone = () => {
+      this.setState({reFreshing: false});
+    }
+
     reachEnd = () => {
       this.props.onReachEnd && this.props.onReachEnd();
       console.log(`到底了`);
     }
 
     render() {
-        const { scrollH } = this.state;
-        const { title1, title2, contentWrapStyle } = this.props;
+        const { scrollH, reFreshing } = this.state;
+        const { title1, title2, searchTitle, contentWrapStyle } = this.props;
         return (
           <View style={{flex: 1}}>
             {
@@ -55,7 +72,7 @@ export default class HomeFrame extends React.Component {
               scrollH >= Util.px2dp(200) &&
               <View style={{zIndex: 999, position: 'absolute', left: 0, right: 0, top: 0, height: Util.px2dp(128), flexDirection: 'column', justifyContent: 'flex-end'}}>
                 <Image source={require('../resource/images/main-bg.png')} style={{position: 'absolute', width: '100%', height: Util.px2dp(128) }}/>
-                <MySearchBar title="联系" />
+                <MySearchBar title={searchTitle} />
               </View>
 
             }
@@ -63,6 +80,12 @@ export default class HomeFrame extends React.Component {
               style={{height: wh-Util.px2dp(98), backgroundColor: '#fff'}}
               onScroll={this._onScroll}
               onMomentumScrollEnd = {this._onReachEnd}
+              refreshControl = {
+                <RefreshControl
+                  refreshing={reFreshing}
+                  onRefresh={this._onRefresh}
+                  />
+              }
               >
               {/*头部背景*/}
               <View style={styles.headerBg}>

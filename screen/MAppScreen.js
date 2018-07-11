@@ -86,6 +86,7 @@ export default class BookScreen extends React.Component {
           <HomeFrame
             title1="蓝灯HR"
             title2="应用"
+            searchTitle="应用"
             contentWrapStyle= {{
               backgroundColor: '#fff',
               borderTopLeftRadius: Util.px2dp(22),
@@ -211,7 +212,8 @@ const styles = StyleSheet.create({
   helloText: {
     fontSize: Util.px2dp(22),
     lineHeight: Util.px2dp(22),
-    color: '#d5d5d5'
+    color: '#bebebe',
+    paddingVertical: 0
   },
   items1: {
     flex: 1,

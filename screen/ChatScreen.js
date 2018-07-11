@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, View, Text, ScrollView, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import { Sline } from '../component/Line';
 import Util from '../Util';
 import HomeFrame from '../component/HomeFrame';
 
@@ -53,8 +54,7 @@ export default class ChatScreen extends React.Component {
                 stitle: '薪',
                 content: '￥10000',
                 des: '6月薪资账单已出',
-                time: '15:32',
-                first: true
+                time: '15:32'
               },
               {
                 key: "22",
@@ -88,36 +88,46 @@ export default class ChatScreen extends React.Component {
     _navigateArticle = ()=> {
         this.props.navigation.navigate('Article');
     }
-    
+
+    _pullToRefresh = (rctx) => {
+        setTimeout(()=> rctx.onRefreshDone(), 3000);
+    }
+
     render() {
         return (
           <HomeFrame
             title1="蓝灯HR"
-            title2="消息中心">
+            title2="消息中心"
+            searchTitle="消息"
+            onRefresh={this._pullToRefresh}>
             {
               // 循环列表
               this.state.messages.map((item) =>
-              <View key={item.key} style={ item.first ? [styles.cardContainer, {borderTopLeftRadius: Util.px2dp(22),
-              borderTopRightRadius: Util.px2dp(22)}] : styles.cardContainer}>
-                  <View style={styles.cardTitle}>
-                    <View style={styles.cardIcon}>
-                      <View style={styles.cardIconImg}></View>
-                      <Text style={styles.cardIconFont}>{item.stitle}</Text>
+              <View key={item.key}>
+                <View style={ item.first ? [styles.cardContainer, {borderTopLeftRadius: Util.px2dp(22),
+                borderTopRightRadius: Util.px2dp(22)}] : styles.cardContainer}>
+                    <View style={styles.cardTitle}>
+                      <View style={styles.cardIcon}>
+                        <View style={styles.cardIconImg}></View>
+                        <Text style={styles.cardIconFont}>{item.stitle}</Text>
+                      </View>
+                      <View style={styles.cardtt}>
+                        <Text style={{fontSize: Util.px2dp(26), color: '#303030'}}>{item.title}</Text>
+                        <Text style={{fontSize: Util.px2dp(18), color: '#cacaca'}}>{item.time}</Text>
+                      </View>
                     </View>
-                    <View style={styles.cardtt}>
-                      <Text style={{fontSize: Util.px2dp(26), color: '#303030'}}>{item.title}</Text>
-                      <Text style={{fontSize: Util.px2dp(18), color: '#cacaca'}}>{item.time}</Text>
+                    <View style={styles.cardContent}>
+                      <View>
+                        <Text style={{fontSize: Util.px2dp(34), color: '#303030'}}>{item.content}</Text>
+                      </View>
+                      <View>
+                        <Text style={{fontSize: Util.px2dp(26), color: '#cacaca'}}>{item.des}</Text>
+                      </View>
                     </View>
-                  </View>
-                  <View style={styles.cardContent}>
-                    <View>
-                      <Text style={{fontSize: Util.px2dp(34), color: '#303030'}}>{item.content}</Text>
-                    </View>
-                    <View>
-                      <Text style={{fontSize: Util.px2dp(26), color: '#cacaca'}}>{item.des}</Text>
-                    </View>
-                  </View>
-              </View>)
+                </View>
+                <Sline height={Util.px2dp(14)} />
+              </View>
+              )
             }
           </HomeFrame>
         );
@@ -146,7 +156,6 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         backgroundColor: 'white',
-        marginBottom: Util.px2dp(14),
         borderBottomWidth: Util.px2dp(1),
         borderBottomColor: '#deddde'
     },
