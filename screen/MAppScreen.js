@@ -79,14 +79,20 @@ export default class BookScreen extends React.Component {
       this.props.navigation.navigate('MAppBox', {app: item});
     }
 
+    _onRefresh = () => {
+      this._fetchData();
+    }
+
     render() {
-        const { isAdmin } = this.state;
+        const { isAdmin, refreshing } = this.state;
 
         return (
           <HomeFrame
             title1="蓝灯HR"
             title2="应用"
             searchTitle="应用"
+            onRefresh={this._onRefresh}
+            refreshing={refreshing}
             contentWrapStyle= {{
               backgroundColor: '#fff',
               borderTopLeftRadius: Util.px2dp(22),

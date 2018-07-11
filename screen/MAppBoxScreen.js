@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, WebView } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, WebView, StatusBar } from 'react-native';
 import Util from '../Util';
 import Screen from './Screen';
 import Service from '../api/Service';
@@ -7,6 +7,8 @@ import { ActionSheet, Button, ActivityIndicator } from 'antd-mobile-rn';
 
 // ejected need change import Icon from 'react-native-vector-icons/FontAwesome';
 import FIcon from 'react-native-vector-icons/Feather';
+
+const statusH = StatusBar.currentHeight;
 
 const injectedJavaScript = `
     window.__LandaJS = {
@@ -50,7 +52,8 @@ export default class MAppBoxScreen extends React.Component {
         headerTitle: app.name || `微应用`,
         headerStyle: {
            backgroundColor:'white',
-           height: Util.px2dp(85),
+           height: Util.px2dp(128),
+           paddingTop: statusH,
            elevation: 1
         },
         headerTitleStyle: {
@@ -63,6 +66,7 @@ export default class MAppBoxScreen extends React.Component {
         headerLeft:( // 设置左边的标签
             <TouchableOpacity onPress={()=>{navigation.pop()}}>
                 <View style={{flexDirection:'row',alignItems:'center',marginLeft:15}}>
+                    <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
                     <FIcon name="chevron-left" size={Util.px2dp(36)} color="#0099fc" />
                 </View>
             </TouchableOpacity>

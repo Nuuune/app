@@ -10,8 +10,7 @@ export default class HomeFrame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          scrollH: 0,
-          reFreshing: false
+          scrollH: 0
         };
     }
 
@@ -37,17 +36,7 @@ export default class HomeFrame extends React.Component {
     }
 
     _onRefresh = () => {
-      this.setState({reFreshing: true});
-      if (this.props.onRefresh) {
-        this.props.onRefresh(this);
-      } else {
-        this.setState({reFreshing: false});
-      }
-      console.log('刷新');
-    }
-
-    onRefreshDone = () => {
-      this.setState({reFreshing: false});
+      this.props.onRefresh && this.props.onRefresh(this);
     }
 
     reachEnd = () => {
@@ -56,8 +45,8 @@ export default class HomeFrame extends React.Component {
     }
 
     render() {
-        const { scrollH, reFreshing } = this.state;
-        const { title1, title2, searchTitle, contentWrapStyle } = this.props;
+        const { scrollH,  } = this.state;
+        const { title1, title2, searchTitle, contentWrapStyle, refreshing } = this.props;
         return (
           <View style={{flex: 1}}>
             {
@@ -77,12 +66,12 @@ export default class HomeFrame extends React.Component {
 
             }
             <ScrollView
-              style={{height: wh-Util.px2dp(98), backgroundColor: '#fff'}}
+              style={{flex: 1, backgroundColor: '#fff'}}
               onScroll={this._onScroll}
               onMomentumScrollEnd = {this._onReachEnd}
               refreshControl = {
                 <RefreshControl
-                  refreshing={reFreshing}
+                  refreshing={refreshing ? true : false}
                   onRefresh={this._onRefresh}
                   />
               }
