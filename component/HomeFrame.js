@@ -66,7 +66,7 @@ export default class HomeFrame extends React.Component {
 
             }
             <ScrollView
-              style={{flex: 1, backgroundColor: '#fff'}}
+              style={{height: wh-Util.px2dp(98), backgroundColor: '#fff'}}
               onScroll={this._onScroll}
               onMomentumScrollEnd = {this._onReachEnd}
               refreshControl = {
@@ -78,7 +78,7 @@ export default class HomeFrame extends React.Component {
               >
               {/*头部背景*/}
               <View style={styles.headerBg}>
-                <Image source={require('../resource/images/main-bg.png')} style={{width: '100%'}}/>
+                <Image source={require('../resource/images/main-bg.png')} style={{width: '100%', height: '100%'}}/>
               </View>
 
               <View style={{height: Util.px2dp(360)}}>
@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#9bb7d5',
       position: 'absolute',
       width: '100%',
-      height: '100%',
+      minHeight: '100%',
+      overflow: 'hidden',
       left: 0,
       right: 0,
       top: 0,
