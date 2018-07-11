@@ -10,27 +10,6 @@ import SignInScreen from './screen/SignInScreen';
 import AuthLoadingScreen from './screen/AuthLoadingScreen';
 import Util from './Util';
 
-import AliyunOSS from 'aliyun-oss-react-native'
-//open log
-AliyunOSS.enableDevMode()
-// defalut configraiton
-const configuration = {
-   maxRetryCount: 3,
-   timeoutIntervalForRequest: 30,
-   timeoutIntervalForResource: 24 * 60 * 60
-};
-const config = {
-  AccessKey: 'LTAIiPjIMa4VhuX3',
-  SecretKey: 'KXrCsmSoVNdxVAAfn0LDmzX3P9oplm',
-};
-const endPoint = 'oss-cn-hangzhou.aliyuncs.com';
-// const companyserver = "http://XXX:PORT";
-// const familyserver = "http://XXX:PORT";
-
-AliyunOSS.initWithPlainTextAccessKey(config.AccessKey, config.SecretKey, endPoint, configuration);
-// AliyunOSS.initWithServerSTS(familyserver,endPoint, configuration)
-
-
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 
 const RootStack = createSwitchNavigator(

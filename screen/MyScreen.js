@@ -40,30 +40,17 @@ export default class BookScreen extends React.Component {
 
     _upLoadPhoto = () => {
       ImagePicker.showImagePicker({
-        title: '选择头像'
+        title: '选择头像',
+        takePhotoButtonTitle: '拍照',
+        chooseFromLibraryButtonTitle: '相册',
+        cancelButtonTitle: '取消',
+        mediaType: 'photo',
+        storageOptions: {
+          skipBackup: true
+        }
       }, (res) => {
         console.log('Response = ', res);
       })
-     //  console.log('请求相册');
-     //  CameraRoll.getPhotos({
-     //    first: 6,
-     //    assetType: 'Photos'
-     // })
-     // .then(r => {
-     //   console.log('拿到照片');
-     //   OssUpload({
-     //     imgPath: r.edges[0].node.image.uri,
-     //     success: (name) => {
-     //       console.log(name)
-     //     },
-     //     fail: (err) => {
-     //       console.error(err);
-     //     }
-     //   })
-     // })
-     // .catch((err) => {
-     //    console.log(err)
-     // });
     }
 
     render() {
@@ -85,7 +72,14 @@ export default class BookScreen extends React.Component {
             }]}>
               <View style={[styles.items1]}>
                 <View style={styles.avatarWrap}>
-                  <Text style={styles.avaterText}>{this.state.userInfo.name[0]}</Text>
+                  <TouchableOpacity onPress={this._upLoadPhoto}>
+                  {
+                    this.state.userInfo.avatar ?
+                    <Image source={{uri: this.state.userInfo.avatar}} style={{  width: Util.px2dp(116), height: Util.px2dp(116), borderRadius: Util.px2dp(58)}}></Image>
+                    : <Text style={styles.avaterText}>{this.state.userInfo.name[0]}</Text>
+                  }
+                  </TouchableOpacity>
+
                 </View>
                 <View style={styles.nameWrap}>
                     <Text style={styles.name}>{this.state.userInfo.name}</Text>
@@ -112,10 +106,6 @@ export default class BookScreen extends React.Component {
               <TouchableOpacity onPress={this._logout} style={[styles.items1, styles.oBtnWrap]}>
                 <Image style={styles.oBtnIcon} source={require('../resource/images/shutdown.png')} />
                 <Text style={styles.oBtnText}>退出登录</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this._upLoadPhoto} style={[styles.items1, styles.oBtnWrap]}>
-                <Image style={styles.oBtnIcon} source={require('../resource/images/shutdown.png')} />
-                <Text style={styles.oBtnText}>上传照片</Text>
               </TouchableOpacity>
             </View>
           </HomeFrame>

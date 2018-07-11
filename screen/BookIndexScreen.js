@@ -140,7 +140,7 @@ export default class BookIndexScreen extends React.Component {
         const { searchShow, cateList, currIndex, normalList } = this.state;
 
         return (
-          <ScrollView style={{flex: 1}}>
+          <View style={{flex: 1}}>
             { // 搜索栏
               searchShow &&
               <View style={{
@@ -165,7 +165,8 @@ export default class BookIndexScreen extends React.Component {
                     onChangeText={this._onInputChange}
                     placeholder="搜索联系人"
                     style={{
-                      textAlign: 'center'
+                      textAlign: 'center',
+                      paddingVertical: 0
                     }}
                     />
                 </View>
@@ -187,78 +188,83 @@ export default class BookIndexScreen extends React.Component {
               searchShow && <View style={{height: Util.px2dp(88)}}></View>
             }
 
-            <View style={{
-              marginTop: Util.px2dp(14),
-              paddingHorizontal: Util.px2dp(42),
-              backgroundColor: '#fff'
-            }}>
-              { // 分类折叠联系人模块
-                cateList.map((item, index) =>
-                <View
-                  key={item.id}
-                  style={{
-                    alignItems: 'stretch',
-                    borderBottomWidth: Util.px2dp(1),
-                    borderBottomColor: '#f3f3f3'
-                  }}>
-                  <TouchableOpacity onPress={()=>{this._toggleCollapse(index, item.employeesNum)}} style={styles.listHeader}>
-                    <Text style={styles.listHeaderText}>
-                      {item.name}({item.employeesNum})
-                    </Text>
-                    <View>
-                      {
-                        index === currIndex ?
-                        <FIcon name="chevron-down" size={Util.px2dp(25)} color="#838383" />
-                        : <FIcon name="chevron-right" size={Util.px2dp(25)} color="#838383" />
-                      }
+            <ScrollView
+              style={{flex: 1}}>
+              <View style={{
+                marginTop: Util.px2dp(14),
+                paddingHorizontal: Util.px2dp(42),
+                backgroundColor: '#fff'
+              }}>
+                { // 分类折叠联系人模块
+                  cateList.map((item, index) =>
+                  <View
+                    key={item.id}
+                    style={{
+                      alignItems: 'stretch',
+                      borderBottomWidth: Util.px2dp(1),
+                      borderBottomColor: '#f3f3f3'
+                    }}>
+                    <TouchableOpacity onPress={()=>{this._toggleCollapse(index, item.employeesNum)}} style={styles.listHeader}>
+                      <Text style={styles.listHeaderText}>
+                        {item.name}({item.employeesNum})
+                      </Text>
+                      <View>
+                        {
+                          index === currIndex ?
+                          <FIcon name="chevron-down" size={Util.px2dp(25)} color="#838383" />
+                          : <FIcon name="chevron-right" size={Util.px2dp(25)} color="#838383" />
+                        }
 
-                    </View>
-                  </TouchableOpacity>
-                  { // 联系人列表循环
-                    index === currIndex &&
-                    item.pList.map((iitem, iindex) =>
-                    <TouchableOpacity onPress={() => {this._toPersonDetail(iitem.id)}} key={`${item.id}-${iitem.id}`} style={ iindex > 0 ? [styles.listHeader, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.listHeader, styles.contactH]}>
-                      { // 头像处理
-                        iitem.avatar ? <Image style={styles.avatar}></Image>
-                        :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
-                          <Text style={styles.avatarText}>{iitem.name[0]}</Text>
-                        </View>
-                      }
-                      <View style={[{flex: 1, marginLeft: Util.px2dp(30)}]}>
-                        <Text style={[{fontSize: Util.px2dp(30)}]}>{iitem.name}</Text>
                       </View>
-                    </TouchableOpacity>)
-                  }
-                </View>
-                )
-              }
-            </View>
-
-            <View style={{
-              marginTop: Util.px2dp(14),
-              paddingHorizontal: Util.px2dp(42),
-              backgroundColor: '#fff'
-            }}>
-              <View style={styles.listHeader}>
-                <Text style={styles.listHeaderText}>{this.props.navigation.state.params.cate === 1 ? `企业` : ``}常用联系人</Text>
-              </View>
-              { // 联系人列表循环
-                normalList.map((iitem, iindex) =>
-                <TouchableOpacity onPress={() => {this._toPersonDetail(iitem.key)}} key={`n-${iitem.key}`} style={ iindex > 0 ? [styles.listHeader, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.listHeader, styles.contactH]}>
-                  { // 头像处理
-                    iitem.avatar ? <Image style={styles.avatar}></Image>
-                    :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
-                      <Text style={styles.avatarText}>{iitem.name[0]}</Text>
-                    </View>
-                  }
-                  <View style={[{flex: 1, marginLeft: Util.px2dp(30)}]}>
-                    <Text style={[{fontSize: Util.px2dp(30)}]}>{iitem.name}</Text>
+                    </TouchableOpacity>
+                    { // 联系人列表循环
+                      index === currIndex &&
+                      item.pList.map((iitem, iindex) =>
+                      <TouchableOpacity onPress={() => {this._toPersonDetail(iitem.id)}} key={`${item.id}-${iitem.id}`} style={ iindex > 0 ? [styles.listHeader, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.listHeader, styles.contactH]}>
+                        { // 头像处理
+                          iitem.avatar ? <Image style={styles.avatar}></Image>
+                          :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
+                            <Text style={styles.avatarText}>{iitem.name[0]}</Text>
+                          </View>
+                        }
+                        <View style={[{flex: 1, marginLeft: Util.px2dp(30)}]}>
+                          <Text style={[{fontSize: Util.px2dp(30)}]}>{iitem.name}</Text>
+                        </View>
+                      </TouchableOpacity>)
+                    }
                   </View>
-                </TouchableOpacity>)
-              }
-            </View>
+                  )
+                }
+              </View>
 
-          </ScrollView>
+              <View style={{
+                marginTop: Util.px2dp(14),
+                paddingHorizontal: Util.px2dp(42),
+                backgroundColor: '#fff'
+              }}>
+                <View style={styles.listHeader}>
+                  <Text style={styles.listHeaderText}>{this.props.navigation.state.params.cate === 1 ? `企业` : ``}常用联系人</Text>
+                </View>
+                { // 联系人列表循环
+                  normalList.map((iitem, iindex) =>
+                  <TouchableOpacity onPress={() => {this._toPersonDetail(iitem.key)}} key={`n-${iitem.key}`} style={ iindex > 0 ? [styles.listHeader, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.listHeader, styles.contactH]}>
+                    { // 头像处理
+                      iitem.avatar ? <Image style={styles.avatar}></Image>
+                      :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
+                        <Text style={styles.avatarText}>{iitem.name[0]}</Text>
+                      </View>
+                    }
+                    <View style={[{flex: 1, marginLeft: Util.px2dp(30)}]}>
+                      <Text style={[{fontSize: Util.px2dp(30)}]}>{iitem.name}</Text>
+                    </View>
+                  </TouchableOpacity>)
+                }
+              </View>
+
+            </ScrollView>
+
+          </View>
+
         );
     }
 }

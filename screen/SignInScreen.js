@@ -8,7 +8,7 @@ import {
     Button,
     Image,
     TextInput,
-    TouchableNativeFeedback,
+    TouchableOpacity,
     Text,
     Keyboard
 } from 'react-native';
@@ -84,11 +84,11 @@ export default class SignInScreen extends React.Component {
                         </View>
                     </View>
 
-                    <TouchableNativeFeedback onPress={this._onPressButton}>
+                    <TouchableOpacity onPress={this._onPressButton}>
                         <View style={styles.formButton}>
                             <Text style={{ fontSize: Util.px2dp(30), color: 'white' }}>登录</Text>
                         </View>
-                    </TouchableNativeFeedback>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
