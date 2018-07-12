@@ -26,6 +26,7 @@ import ArticleScreen from './ArticleScreen';
 import BookIndexScreen from './BookIndexScreen';
 import BookEditScreen from './BookEditScreen';
 import BookDetailScreen from './BookDetailScreen';
+import IMScreen from './IMScreen';
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -130,7 +131,8 @@ const HomeStack = createStackNavigator({
     Pages4: createStackNavigator({
         BookIndex: BookIndexScreen,
         BookDetail: BookDetailScreen,
-        BookEdit: BookEditScreen
+        BookEdit: BookEditScreen,
+        IM: IMScreen
     })
 }, {
     navigationOptions: {

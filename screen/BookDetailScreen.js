@@ -73,6 +73,9 @@ export default class BookDetailScreen extends React.Component {
       this.setState({scrollH: y})
     }
 
+    toIM = (person) => {
+      this.props.navigation.navigate("IM", {person})
+    }
 
 
     render() {
@@ -178,19 +181,21 @@ export default class BookDetailScreen extends React.Component {
               justifyContent: 'center',
               paddingHorizontal: Util.px2dp(47)
             }}>
-              <View style={{
-                backgroundColor: '#3296fa',
-                height: Util.px2dp(70),
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: Util.px2dp(6)
-              }}>
+              <TouchableOpacity
+                onPress={() => {this.toIM(person)}}
+                style={{
+                  backgroundColor: '#3296fa',
+                  height: Util.px2dp(70),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: Util.px2dp(6)
+                }}>
                 <Text style={{
                   fontSize: Util.px2dp(30),
                   lineHeight: Util.px2dp(30),
                   color: '#fff'
                 }}>发消息</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         );

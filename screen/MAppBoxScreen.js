@@ -1,9 +1,13 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, WebView, StatusBar } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, WebView, StatusBar, Platform } from 'react-native';
 import Util from '../Util';
 import Screen from './Screen';
 import Service from '../api/Service';
 import { ActionSheet, Button, ActivityIndicator } from 'antd-mobile-rn';
+import ImagePicker from 'react-native-image-picker';
+import { Geolocation } from "react-native-amap-geolocation"
+
+
 
 // ejected need change import Icon from 'react-native-vector-icons/FontAwesome';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -97,8 +101,15 @@ export default class MAppBoxScreen extends React.Component {
         })
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         this.setState({loading: true});
+        await Geolocation.init({
+          android: "47ebe54870aba5971a32aa0f24d48b54"
+        })
+        Geolocation.setOptions({
+          interval: 8000,
+          distanceFilter: 20
+        })
     }
 
     _onMessage = (event) => {
@@ -106,36 +117,38 @@ export default class MAppBoxScreen extends React.Component {
 
         if (data) {
             data = JSON.parse(data);
-
+            console.log(data);
             if (data.request === 'camera') {
-                // this.props.navigation.navigate('Camera', {
-                //     onSaved: (image) => {
-                //         console.log("camera image done");
-                //         this._pushResult(data.id, image);
-                //     }
-                // });
+              ImagePicker.launchCamera({
+                mediaType: 'photo',
+                storageOptions: {
+                  cameraRoll: true
+                }
+              }, (response)  => {
+                if(response.error) {
+                  console.log(111);
+                  Alert.alert("ImagePicker Error:", response.error);
+                } else {
+                  console.log(222);
+                  this._pushResult(data.id, response);
+                }
+              });
             } else if (data.request === 'geo') {
-                // this._getLocationAsync((location) => {
-                //     this._pushResult(data.id, location);
-                // })
+                console.log('进入geo');
+                this._getLocationAsync((location) => {
+                    this._pushResult(data.id, location);
+                })
             }
         }
     }
 
-    // _getLocationAsync = async (cb) => {
-    //     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    //     if (status !== 'granted') {
-    //         this.setState({
-    //             errorMessage: 'Permission to access location was denied',
-    //         });
-    //     }
-    //
-    //     let location = await Location.getCurrentPositionAsync({});
-    //     // let location = await {};
-    //     console.log(location);
-    //
-    //     cb.call(this, location);
-    // };
+
+    _getLocationAsync = async (cb) => {
+        Geolocation.start();
+        const location = await Geolocation.getLastLocation();
+        Geolocation.stop();
+        cb.call(this, location);
+    };
 
     _pushResult = (id, data) => {
         if (this.webview) {

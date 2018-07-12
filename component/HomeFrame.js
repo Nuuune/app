@@ -78,7 +78,7 @@ export default class HomeFrame extends React.Component {
               >
               {/*头部背景*/}
               <View style={styles.headerBg}>
-                <Image source={require('../resource/images/main-bg.png')} style={{width: '100%', height: '100%'}}/>
+                <Image source={require('../resource/images/main-bg.png')} style={{width: '100%'}}/>
               </View>
 
               <View style={{height: Util.px2dp(360)}}>
