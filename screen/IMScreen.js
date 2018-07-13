@@ -1,5 +1,5 @@
 import React from 'react';
-import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, InputToolbar, Composer } from 'react-native-gifted-chat';
 import {
   StatusBar,
   TouchableOpacity,
@@ -97,16 +97,20 @@ export default class IMScreen extends React.Component {
         {...props}
         containerStyle={{
           width: '100%',
-          height: Util.px2dp(92),
           paddingHorizontal: Util.px2dp(20),
-          paddingVertical: Util.px2dp(18)}} />);
+          paddingVertical: Util.px2dp(18),
+          backgroundColor: '#f6f6f6'
+        }}
+        />);
   }
 
   renderSend(props) {
     const {text, onSend} = props;
     return (
-      <View>
-        <TouchableOpacity><Text>+</Text></TouchableOpacity>
+      <View style={[styles.sendBox, {marginBottom: Util.px2dp(6)}]}>
+        <TouchableOpacity style={styles.actionBtn}>
+          <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
+        </TouchableOpacity>
         {
           text.trim().length > 0 ?
           <TouchableOpacity
@@ -118,7 +122,9 @@ export default class IMScreen extends React.Component {
             <View><Text>发送</Text></View>
           </TouchableOpacity>
           :
-          <TouchableOpacity><Text>-</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn}>
+            <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
+          </TouchableOpacity>
         }
       </View>
     )
@@ -127,12 +133,25 @@ export default class IMScreen extends React.Component {
 
   renderActions(props) {
     return (
-      <View>
-        <TouchableOpacity style={styles.actionBtn}>
-          <FIcon size={30} name='plus' />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={[styles.actionBtn, {marginBottom: Util.px2dp(6)}]}>
+        <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
+      </TouchableOpacity>
     );
+  }
+
+  renderComposer(props) {
+    return (
+      <Composer
+        {...props}
+        textInputStyle={styles.inputStyle}
+        composerHeight={Util.px2dp(56)}
+        textInputProps={
+          {
+            onContentSizeChange: () => false,
+            onChange: () => false
+          }
+        } />
+    )
   }
 
 
@@ -148,6 +167,7 @@ export default class IMScreen extends React.Component {
         renderInputToolbar={this.renderInputToolbar}
         renderActions={this.renderActions}
         renderSend={this.renderSend}
+        renderComposer={this.renderComposer}
       />
     )
   }
@@ -155,13 +175,28 @@ export default class IMScreen extends React.Component {
 
 const styles = StyleSheet.create({
     actionBtn: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        borderColor: '#e39c22',
-        borderWidth: 4
+        width: Util.px2dp(54),
+        height: Util.px2dp(54),
+        borderRadius: Util.px2dp(27),
+        borderColor: '#7a7d81',
+        borderWidth: Util.px2dp(2),
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    SendBox: {
-
+    sendBox: {
+      width: Util.px2dp(128),
+      height: Util.px2dp(56),
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    inputStyle: {
+      backgroundColor: '#fff',
+      borderRadius: Util.px2dp(10),
+      marginHorizontal: Util.px2dp(20),
+      marginVertical: 0,
+      lineHeight: Util.px2dp(32),
+      fontSize: Util.px2dp(32),
+      paddingVertical: 0
     }
 });
