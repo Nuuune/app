@@ -42,13 +42,13 @@ class Service {
         return this.validate(Api.post(`${API_URL}/api/sso/auth/login`, { account: account, password: password }))
             .then(resp => {
                 this.accessToken = resp.data.access_token;
-                this.selectCorp("1");
+                console.log(resp);
                 return resp.data;
             });
     }
 
     getCorpList() {
-        return this.validate(Api.get(`${API_URL}/api/corp/oa/user/corp/simplelist`))
+        return this.validate(Api.getinit(`${API_URL}/api/corp/oa/user/corp/simplelist`))
             .then(resp => {
                 return resp.data;
             });

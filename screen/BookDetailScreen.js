@@ -36,11 +36,12 @@ export default class BookDetailScreen extends React.Component {
             </TouchableOpacity>
         ),
         headerRight:( // 设置右边的标签
-            <TouchableOpacity onPress={() => {navigation.navigate('BookEdit')}}>
-                <View style={{flexDirection:'row',alignItems:'center',marginRight:15}}>
-                    <FIcon name="edit" size={Util.px2dp(36)} color="#0099fc" />
-                </View>
-            </TouchableOpacity>
+            // <TouchableOpacity onPress={() => {navigation.navigate('BookEdit')}}>
+            //     <View style={{flexDirection:'row',alignItems:'center',marginRight:15}}>
+            //         <FIcon name="edit" size={Util.px2dp(36)} color="#0099fc" />
+            //     </View>
+            // </TouchableOpacity>
+            null
         )
       }
     };

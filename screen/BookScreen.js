@@ -83,6 +83,11 @@ export default class BookScreen extends React.Component {
       }
     }
 
+    toIM = (person) => {
+      console.log(person);
+      this.props.navigation.navigate("IM", {person})
+    }
+
     render() {
         const { contactList, isFetching } = this.state;
         return (
@@ -133,7 +138,7 @@ export default class BookScreen extends React.Component {
 
               {
                 contactList.map((item, index) => (
-                  <View key={index} style={ index > 0 ? [styles.items1, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.items1, styles.contactH]}>
+                  <TouchableOpacity onPress={() => {this.toIM(item)}} key={index} style={ index > 0 ? [styles.items1, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.items1, styles.contactH]}>
                     { // 头像处理
                       item.avatar ? <Image style={styles.avatar}></Image>
                       :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
@@ -143,7 +148,7 @@ export default class BookScreen extends React.Component {
                     <View style={[styles.items1, {marginLeft: Util.px2dp(30)}]}>
                       <Text style={[{fontSize: Util.px2dp(30)}]}>{item.name}</Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 ))
               }
               <View style={{height: Util.px2dp(50)}}>

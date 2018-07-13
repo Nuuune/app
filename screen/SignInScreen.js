@@ -96,6 +96,7 @@ export default class SignInScreen extends React.Component {
 
     _onPressButton = () => {
         Service.login(this.state.account, this.state.password).then(async () => {
+
             await AsyncStorage.setItem('userToken', Service.accessToken);
             console.log(Service.accessToken);
             Service.getCorpList().then(corps => {

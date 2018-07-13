@@ -1,5 +1,17 @@
 import React from 'react';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
+import {
+  StatusBar,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Text
+} from 'react-native';
+
+import FIcon from 'react-native-vector-icons/Feather';
+import Util from '../Util';
+
+const statusH = StatusBar.currentHeight;
 
 export default class IMScreen extends React.Component {
 
@@ -51,7 +63,7 @@ export default class IMScreen extends React.Component {
 
 
   componentWillMount() {
-    const person = this.props.navigation
+    const person = this.props.navigation.state.params.person;
     this.users = {
       me: {
         _id: 1
@@ -79,6 +91,51 @@ export default class IMScreen extends React.Component {
     }))
   }
 
+  renderInputToolbar(props) {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          width: '100%',
+          height: Util.px2dp(92),
+          paddingHorizontal: Util.px2dp(20),
+          paddingVertical: Util.px2dp(18)}} />);
+  }
+
+  renderSend(props) {
+    const {text, onSend} = props;
+    return (
+      <View>
+        <TouchableOpacity><Text>+</Text></TouchableOpacity>
+        {
+          text.trim().length > 0 ?
+          <TouchableOpacity
+            onPress={() => {
+              onSend({ text: text.trim() }, true);
+            }}
+            accessibilityTraits="button"
+          >
+            <View><Text>发送</Text></View>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity><Text>-</Text></TouchableOpacity>
+        }
+      </View>
+    )
+
+  }
+
+  renderActions(props) {
+    return (
+      <View>
+        <TouchableOpacity style={styles.actionBtn}>
+          <FIcon size={30} name='plus' />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+
   render() {
     return (
       <GiftedChat
@@ -88,7 +145,23 @@ export default class IMScreen extends React.Component {
         user={{
           _id: 1,
         }}
+        renderInputToolbar={this.renderInputToolbar}
+        renderActions={this.renderActions}
+        renderSend={this.renderSend}
       />
     )
   }
 }
+
+const styles = StyleSheet.create({
+    actionBtn: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        borderColor: '#e39c22',
+        borderWidth: 4
+    },
+    SendBox: {
+
+    }
+});

@@ -131,8 +131,10 @@ const HomeStack = createStackNavigator({
     Pages4: createStackNavigator({
         BookIndex: BookIndexScreen,
         BookDetail: BookDetailScreen,
-        BookEdit: BookEditScreen,
-        IM: IMScreen
+        BookEdit: BookEditScreen
+    }),
+    pages5: createStackNavigator({
+      IM: IMScreen
     })
 }, {
     navigationOptions: {

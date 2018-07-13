@@ -190,10 +190,9 @@ export default class MAppBoxScreen extends React.Component {
                 alignItems: 'stretch',
                 justifyContent: 'center',
             }}>
-                {/* <AppBox uri="http://landa.aosaiban.com/dk/"/> */}
+                {/* <AppBox uri="http://landa.aosaiban.com/dk/"/> // source={{ uri: `http://120.24.232.64/h5-test/test.html?__init=${init}&__ts=${ts}` }} */}
                 <WebView
                     ref={c => this.webview = c}
-                    // source={{ uri: `http://120.24.232.64/h5-test/test.html?__init=${init}&__ts=${ts}` }}
                     source={{ uri: `${uri}?__init=${init}&__ts=${ts}` }}
                     onLoad={() => this._hideSpinner()}
                     style={{flex: 1}}

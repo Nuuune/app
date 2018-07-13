@@ -29,6 +29,21 @@ class Api {
         });
     }
 
+    getinit(url, params) {
+      let uri = new URI(url);
+      uri.query(params);
+
+      console.log("corp key is" + this.corpKey);
+      console.log('fetch ' + uri.toString());
+      return fetch(uri.toString(), {
+          method: 'GET',
+          headers: {
+              Accept: 'application/json',
+              token: this.token
+          },
+      });
+    }
+
     post(url, params) {
         let formData = new FormData();
         for (let k in params) {
