@@ -121,6 +121,7 @@ export default class MAppBoxScreen extends React.Component {
             if (data.request === 'camera') {
               ImagePicker.launchCamera({
                 mediaType: 'photo',
+                quality: 0.2,
                 storageOptions: {
                   cameraRoll: true
                 }
@@ -129,8 +130,10 @@ export default class MAppBoxScreen extends React.Component {
                   console.log(111);
                   Alert.alert("ImagePicker Error:", response.error);
                 } else {
-                  console.log(222);
-                  this._pushResult(data.id, response);
+                  // 需要延时返回数据给webview 原因不详
+                  setTimeout(() => {
+                    this._pushResult(data.id, response);
+                  }, 1000);
                 }
               });
             } else if (data.request === 'geo') {
@@ -153,6 +156,8 @@ export default class MAppBoxScreen extends React.Component {
     _pushResult = (id, data) => {
         if (this.webview) {
             console.log("inject result");
+            console.log(id);
+            console.log(data);
             this.webview.injectJavaScript(`__LandaJS.result.push(${JSON.stringify({id, data})});`);
         }
     }
