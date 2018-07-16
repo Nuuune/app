@@ -42,6 +42,7 @@ class Service {
         return this.validate(Api.post(`${API_URL}/api/sso/auth/login`, { account: account, password: password }))
             .then(resp => {
                 this.accessToken = resp.data.access_token;
+                Api.updateToken(this.accessToken);
                 console.log(resp);
                 return resp.data;
             });

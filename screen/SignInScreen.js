@@ -99,6 +99,7 @@ export default class SignInScreen extends React.Component {
 
             await AsyncStorage.setItem('userToken', Service.accessToken);
             console.log(Service.accessToken);
+            
             Service.getCorpList().then(corps => {
                 if (corps.length > 0) {
                     Service.selectCorp(corps[0].id);

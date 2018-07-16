@@ -10,7 +10,7 @@ class Api {
 
     updateToken(token, corpKey) {
         this.token = token;
-        this.corpKey = corpKey;
+        if (corpKey) this.corpKey = corpKey;
     }
 
     get(url, params) {
