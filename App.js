@@ -37,40 +37,6 @@ export default class App extends React.Component {
     this.setState({user});
   }
 
-  componentWillMount() {
-    // if (Platform.OS === 'android' && !Constants.isDevice) {
-    //   this.setState({
-    //     errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-    //   });
-    // } else {
-    //   this._getLocationAsync();
-    // }
-  }
-
-  // _getLocationAsync = async () => {
-  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  //   if (status !== 'granted') {
-  //     this.setState({
-  //       errorMessage: 'Permission to access location was denied',
-  //     });
-  //   }
-
-  //   let location = await Location.getCurrentPositionAsync({});
-  //   console.log(location);
-  // };
-
-  componentDidMount() {
-    // Service.login().then(data => {
-    //   Service.getCorpList().then(corps => {
-    //     Service.selectCorp("1");
-    //     Service.getUserInfo().then(userInfo => {
-    //       this.setState({user: userInfo});
-    //       console.log(userInfo);
-    //     });
-    //   })
-    // })
-  }
-
   render() {
     return (
       <Store.Provider value={this.state}>

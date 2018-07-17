@@ -1,5 +1,6 @@
 import Api from './Api';
 import { API_URL } from 'react-native-dotenv';
+import { Toast } from 'antd-mobile-rn';
 
 class Service {
     constructor() {
@@ -19,10 +20,14 @@ class Service {
     }
 
     validate(request) {
+        Toast.loading('', 0);
         return request.then(resp => resp.json()).then(resp => {
             if (resp.errmsg === 'ok') {
+                Toast.hide();
                 return resp;
             } else {
+                Toast.hide();
+                Toast.info(resp.message);
                 console.warn(resp);
                 this.ctx && this.ctx.props.navigation.navigate('Auth');
                 return Promise.reject(resp);
@@ -59,6 +64,7 @@ class Service {
         if (forceRefresh || ! this.user) {
             return this.validate(Api.get(`${API_URL}/api/corp/oa/user/me`))
                 .then(resp => {
+                    console.log(resp);
                     this.user = resp.data;
                     return resp.data;
                 });

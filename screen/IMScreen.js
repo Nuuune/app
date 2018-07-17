@@ -8,6 +8,8 @@ import {
   Text,
   Keyboard
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+import uuid from 'uuid';
 
 import FIcon from 'react-native-vector-icons/Feather';
 import Util from '../Util';
@@ -59,11 +61,20 @@ export default class IMScreen extends React.Component {
     this.state = {
       messages: [],
       keyborderH: 0,
-      toolsPosition: 'absolute'
+      toolBoxShow: false,
+      isLoading: false
     };
     this.myChat;
+    this.myToolbar;
+    this.loadEarlier = this.loadEarlier.bind(this);
     this.togTools = this.togTools.bind(this);
     this.onSend = this.onSend.bind(this);
+    this.renderInputToolbar = this.renderInputToolbar.bind(this);
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
+    this._genMessage = this._genMessage.bind(this);
+    this.onToolsBtn = this.onToolsBtn.bind(this);
+    this.renderAccessory = this.renderAccessory.bind(this);
   }
 
   componentDidMount() {
@@ -81,14 +92,13 @@ export default class IMScreen extends React.Component {
   _keyboardDidShow = (e) => {
     this.setState({
       keyborderH:  e.endCoordinates.height,
-      toolsPosition: 'relative'
+      toolBoxShow: false
     })
   }
 
   _keyboardDidHide = () => {
     this.setState({
-      keyborderH: 0,
-      toolsPosition: 'absolute'
+      keyborderH: 0
     })
   }
 
@@ -121,6 +131,7 @@ export default class IMScreen extends React.Component {
     return (
       <InputToolbar
         {...props}
+        ref={(ref) => this.myToolbar = ref}
         containerStyle={{
           width: '100%',
           paddingHorizontal: Util.px2dp(20),
@@ -188,18 +199,18 @@ export default class IMScreen extends React.Component {
   renderAccessory(props) {
     return (
       <View style={styles.toolBox}>
-        <View style={styles.toolBtn}>
+        <TouchableOpacity onPress={() => {this.onToolsBtn(0)}} style={styles.toolBtn}>
           <View style={styles.toolBtnIcon}>
             <FIcon size={Util.px2dp(60)} name='image' color='#7a7d81' />
           </View>
           <Text style={styles.toolBtnText}>相册</Text>
-        </View>
-        <View style={styles.toolBtn}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.onToolsBtn(0)}} style={styles.toolBtn}>
           <View style={styles.toolBtnIcon}>
             <FIcon size={Util.px2dp(60)} name='instagram' color='#7a7d81' />
           </View>
           <Text style={styles.toolBtnText}>拍摄</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -212,26 +223,104 @@ export default class IMScreen extends React.Component {
     }));
   }
 
-  togTools() {
-    console.log('toggleTools');
-    const {toolBoxShow} = this.state;
-    if (toolBoxShow) {
-      this.setState({
-        toolBoxShow: false,
-        toolsPosition: 'absolute'
-      }, ()=>console.log('toggleTools111'));
+  onToolsBtn(type) {
+    const options = {
+      mediaType: 'photo',
+      storageOptions: {
+        skipBackup: true
+      }
+    }
+
+    if (type) {
+      // Launch Camera:
+      ImagePicker.launchCamera(options, (response)  => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        }
+        else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        }
+        else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+          this.imgSend(response.uri);
+        }
+      });
     } else {
-      this.setState({
-        toolBoxShow: true,
-        toolsPosition: 'relative'
-      }, ()=>console.log('toggleTools222'));
+      // Open Image Library:
+      ImagePicker.launchImageLibrary(options, (response)  => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        }
+        else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        }
+        else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+          this.imgSend(response.uri);
+        }
+      });
     }
 
   }
 
+  imgSend(uri) {
+    console.log('发送图片');
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, this._genMessage({
+        user: this.users.me,
+        img: uri
+      }))
+    }))
+  }
+
+  _genMessage(option = {}) {
+    const { user, text, img } = option;
+    if ( !user ) return ;
+    if ( text || img ) {
+      return {
+        _id: uuid.v4(),
+        text: text ? text : '',
+        image: img ? img : '',
+        createdAt: new Date(),
+        user
+      }
+    }
+  }
+
+  togTools() {
+    console.log('toggleTools');
+    console.log(this.myToolbar);
+    const {toolBoxShow} = this.state;
+    if (toolBoxShow) {
+      this.setState({
+        toolBoxShow: false
+      }
+      // , () => {
+      //   this.myToolbar.setState({position: 'absolute'}, () => console.log('toggleTools111'))
+      // }
+      );
+    } else {
+      this.setState({
+        toolBoxShow: true
+      }, () => Keyboard.dismiss()
+      // , () => {
+      //   this.myToolbar.setState({position: 'relative'}, () => console.log('toggleTools222'))
+      // }
+      );
+    }
+
+  }
+
+  loadEarlier() {
+    console.log('获取历史记录')
+  }
 
   render() {
-    const {toolBoxShow, toolsPosition} = this.state;
+    const {toolBoxShow, isLoading} = this.state;
     console.log(toolBoxShow);
     return (
       <GiftedChat
@@ -243,12 +332,14 @@ export default class IMScreen extends React.Component {
         user={{
           _id: 1
         }}
-        toolsPosition={toolsPosition}
+        loadEarlier={!isLoading}
+        onLoadEarlier={() => {this.loadEarlier()}}
+        isLoadingEarlier={isLoading}
         renderInputToolbar={this.renderInputToolbar}
         renderActions={this.renderActions}
         renderSend={this.renderSend}
         renderComposer={this.renderComposer}
-        renderAccessory={toolBoxShow ? this.renderAccessory : () => null}
+        renderAccessory={this.renderAccessory}
         accessoryStyle={toolBoxShow ? styles.toolBox : {height: 0}}
       />
     )
@@ -263,8 +354,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       borderTopWidth: Util.px2dp(1),
-      borderColor: '#eeedee',
-      backgroundColor: '#b12435'
+      borderColor: '#eeedee'
     },
     toolBtn: {
       width: Util.px2dp(108),

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Util from '../Util';
 import Service from '../api/Service';
+import { Toast } from 'antd-mobile-rn';
 
 export default class SignInScreen extends React.Component {
     static navigationOptions = {
@@ -95,18 +96,25 @@ export default class SignInScreen extends React.Component {
     }
 
     _onPressButton = () => {
-        Service.login(this.state.account, this.state.password).then(async () => {
+        const {account, password} = this.state;
+        if (account && password) {
+          Service.login(this.state.account, this.state.password).then(async () => {
 
-            await AsyncStorage.setItem('userToken', Service.accessToken);
-            console.log(Service.accessToken);
-            
-            Service.getCorpList().then(corps => {
-                if (corps.length > 0) {
-                    Service.selectCorp(corps[0].id);
-                }
-                this.props.navigation.navigate('App');
-            });
-        })
+              await AsyncStorage.setItem('userToken', Service.accessToken);
+              console.log(Service.accessToken);
+
+              Service.getCorpList().then(corps => {
+                  console.log(corps)
+                  if (corps.length > 0) {
+                      Service.selectCorp(corps[0].id);
+                  }
+                  this.props.navigation.navigate('App');
+              });
+          })
+        } else {
+          Toast.info('请输入账号或密码')
+        }
+
     }
 }
 
