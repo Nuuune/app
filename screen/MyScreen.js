@@ -27,8 +27,11 @@ export default class BookScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
+      console.log(`---------------------`)
       Service.getUserInfo().then(userInfo => {
+
+        console.log(`---------------------userInfo`)
         this.setState({userInfo});
       })
     }
@@ -84,7 +87,7 @@ export default class BookScreen extends React.Component {
                 <View style={styles.nameWrap}>
                     <Text style={styles.name}>{this.state.userInfo.name}</Text>
                   <View>
-                      <Text style={[styles.des, { marginBottom: Util.px2dp(10) }]}>{this.state.userInfo.dept.name}-{this.state.userInfo.roles[0].name}</Text>
+                      <Text style={[styles.des, { marginBottom: Util.px2dp(10) }]}>{this.state.userInfo.dept ? this.state.userInfo.dept.name : '无部门'}-{this.state.userInfo.roles[0].name}</Text>
                     <Text style={styles.des}>{this.state.userInfo.workPlace}</Text>
                   </View>
                 </View>

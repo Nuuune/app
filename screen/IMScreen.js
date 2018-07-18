@@ -11,6 +11,8 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import uuid from 'uuid';
 
+import Emoticons from 'react-native-emoticons';
+
 import FIcon from 'react-native-vector-icons/Feather';
 import Util from '../Util';
 
@@ -62,7 +64,8 @@ export default class IMScreen extends React.Component {
       messages: [],
       keyborderH: 0,
       toolBoxShow: false,
-      isLoading: false
+      isLoading: false,
+      showEmoticons: false
     };
     this.myChat;
     this.myToolbar;
@@ -74,7 +77,7 @@ export default class IMScreen extends React.Component {
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this._genMessage = this._genMessage.bind(this);
     this.onToolsBtn = this.onToolsBtn.bind(this);
-    this.renderAccessory = this.renderAccessory.bind(this);
+    this.togEmojiShow = this.togEmojiShow.bind(this);
   }
 
   componentDidMount() {
@@ -92,7 +95,8 @@ export default class IMScreen extends React.Component {
   _keyboardDidShow = (e) => {
     this.setState({
       keyborderH:  e.endCoordinates.height,
-      toolBoxShow: false
+      toolBoxShow: false,
+      showEmoticons: false
     })
   }
 
@@ -172,7 +176,7 @@ export default class IMScreen extends React.Component {
 
   renderActions(props) {
     return (
-      <TouchableOpacity style={[styles.actionBtn, {marginBottom: Util.px2dp(6)}]}>
+      <TouchableOpacity onPress={() => {props.togEmojiShow()}} style={[styles.actionBtn, {marginBottom: Util.px2dp(6)}]}>
         <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
       </TouchableOpacity>
     );
@@ -192,26 +196,6 @@ export default class IMScreen extends React.Component {
         } />
     )
   }
-
-  renderAccessory(props) {
-    return (
-      <View style={styles.toolBox}>
-        <TouchableOpacity onPress={() => {this.onToolsBtn(0)}} style={styles.toolBtn}>
-          <View style={styles.toolBtnIcon}>
-            <FIcon size={Util.px2dp(60)} name='image' color='#7a7d81' />
-          </View>
-          <Text style={styles.toolBtnText}>相册</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {this.onToolsBtn(0)}} style={styles.toolBtn}>
-          <View style={styles.toolBtnIcon}>
-            <FIcon size={Util.px2dp(60)} name='instagram' color='#7a7d81' />
-          </View>
-          <Text style={styles.toolBtnText}>拍摄</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
 
   onSend(messages) {
     console.log('发送消息');
@@ -289,56 +273,99 @@ export default class IMScreen extends React.Component {
   }
 
   togTools() {
-    console.log('toggleTools');
-    console.log(this.myToolbar);
     const {toolBoxShow} = this.state;
     if (toolBoxShow) {
       this.setState({
         toolBoxShow: false
-      }
-      // , () => {
-      //   this.myToolbar.setState({position: 'absolute'}, () => console.log('toggleTools111'))
-      // }
-      );
+      });
     } else {
       this.setState({
         toolBoxShow: true
-      }, () => Keyboard.dismiss()
-      // , () => {
-      //   this.myToolbar.setState({position: 'relative'}, () => console.log('toggleTools222'))
-      // }
-      );
+      }, () => Keyboard.dismiss());
     }
+  }
 
+  togEmojiShow() {
+    const {showEmoticons} = this.state;
+    if (showEmoticons) {
+      this.setState({
+        showEmoticons: false
+      });
+    } else {
+      this.setState({
+        showEmoticons: true
+      }, () => Keyboard.dismiss());
+    }
   }
 
   loadEarlier() {
     console.log('获取历史记录')
   }
 
+  _onEmoticonPress(emojiO) {
+    console.log(`emojiO:-------`);
+    console.log(emojiO);
+  }
+
+  _onBackspacePress() {
+    console.log(`emojiBack`);
+  }
+
   render() {
-    const {toolBoxShow, isLoading} = this.state;
-    console.log(toolBoxShow);
+    const {toolBoxShow, isLoading, showEmoticons} = this.state;
+    console.log(showEmoticons);
     return (
-      <GiftedChat
-        ref={(ref) => this.myChat = ref}
-        placeholder=""
-        messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
-        onToggleTool={() => this.togTools()}
-        user={{
-          _id: 1
-        }}
-        loadEarlier={!isLoading}
-        onLoadEarlier={() => {this.loadEarlier()}}
-        isLoadingEarlier={isLoading}
-        renderInputToolbar={this.renderInputToolbar}
-        renderActions={this.renderActions}
-        renderSend={this.renderSend}
-        renderComposer={this.renderComposer}
-        renderAccessory={this.renderAccessory}
-        accessoryStyle={toolBoxShow ? styles.toolBox : {height: 0}}
-      />
+      <View style={{flex: 1}}>
+        <GiftedChat
+          ref={(ref) => this.myChat = ref}
+          placeholder=""
+          messages={this.state.messages}
+          onSend={messages => this.onSend(messages)}
+          onToggleTool={() => this.togTools()}
+          togEmojiShow={() => this.togEmojiShow()}
+          user={{
+            _id: 1
+          }}
+          loadEarlier={!isLoading}
+          onLoadEarlier={() => {this.loadEarlier()}}
+          isLoadingEarlier={isLoading}
+          renderInputToolbar={this.renderInputToolbar}
+          renderActions={this.renderActions}
+          renderSend={this.renderSend}
+          renderComposer={this.renderComposer}
+        />
+        {
+          showEmoticons &&
+          <View
+            style={{position: 'relative', height: 300}}>
+            <Emoticons
+             onEmoticonPress={this._onEmoticonPress.bind(this)}
+             onBackspacePress={this._onBackspacePress.bind(this)}
+             show={true}
+             concise={true}
+             showHistoryBar={true}
+             showPlusBar={false}
+            />
+          </View>
+        }
+        {
+          toolBoxShow &&
+          <View style={styles.toolBox}>
+            <TouchableOpacity onPress={() => {this.onToolsBtn(0)}} style={styles.toolBtn}>
+              <View style={styles.toolBtnIcon}>
+                <FIcon size={Util.px2dp(60)} name='image' color='#7a7d81' />
+              </View>
+              <Text style={styles.toolBtnText}>相册</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {this.onToolsBtn(1)}} style={styles.toolBtn}>
+              <View style={styles.toolBtnIcon}>
+                <FIcon size={Util.px2dp(60)} name='instagram' color='#7a7d81' />
+              </View>
+              <Text style={styles.toolBtnText}>拍摄</Text>
+            </TouchableOpacity>
+          </View>
+        }
+      </View>
     )
   }
 }
