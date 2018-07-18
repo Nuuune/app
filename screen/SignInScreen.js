@@ -118,7 +118,7 @@ export default class SignInScreen extends React.Component {
     }
 }
 
-const textColor = '#80b6f3';
+const textColor = '#2a5688';
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         lineHeight: Util.px2dp(36),
         fontSize: Util.px2dp(36),
         flex: 1,
-        color: '#38679d'
+        color: '#7eb3f0'
     },
     loginForm: {
         marginTop: Util.px2dp(180),

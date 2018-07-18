@@ -108,8 +108,8 @@ export default class BookScreen extends React.Component {
               <View style={[styles.items1]}>
                 <Text style={styles.h1}>上海蓝灯数据科技股份有限公司</Text>
               </View>
-              <TouchableOpacity onPress={() => this._onPress(1)} style={[styles.items1, {borderBottomWidth: Util.px2dp(1), borderBottomColor: '#f3f3f3'}]}>
-                <View style={styles.cateIcon}></View>
+              <TouchableOpacity onPress={() => this._onPress(1)} style={[styles.items1, {borderBottomWidth: Util.px2dp(1), borderBottomColor: '#dedbdb'}]}>
+                <Image source={require('../resource/images/cate1.png')} style={styles.cateIcon} />
                 <View style={styles.items1}>
                   <Text style={[{fontSize: Util.px2dp(28)}]}>组织架构</Text>
                 </View>
@@ -118,7 +118,7 @@ export default class BookScreen extends React.Component {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this._onPress(2)} style={[styles.items1]}>
-                <View style={styles.cateIcon}></View>
+                <Image source={require('../resource/images/cate2.png')} style={styles.cateIcon} />
                 <View style={styles.items1}>
                   <Text style={[{fontSize: Util.px2dp(28)}]}>外部联系人</Text>
                 </View>
@@ -138,10 +138,10 @@ export default class BookScreen extends React.Component {
 
               {
                 contactList.map((item, index) => (
-                  <TouchableOpacity onPress={() => {this.toIM(item)}} key={index} style={ index > 0 ? [styles.items1, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#f3f3f3'}] : [styles.items1, styles.contactH]}>
+                  <TouchableOpacity onPress={() => {this.toIM(item)}} key={index} style={ index > 0 ? [styles.items1, styles.contactH, {borderTopWidth: Util.px2dp(1), borderTopColor: '#dedbdb'}] : [styles.items1, styles.contactH]}>
                     { // 头像处理
                       item.avatar ? <Image style={styles.avatar}></Image>
-                      :<View style={[styles.avatar, {backgroundColor: '#52c5cc'}]}>
+                      :<View style={[styles.avatar, {backgroundColor: '#0099fc'}]}>
                         <Text style={styles.avatarText}>{item.name[0]}</Text>
                       </View>
                     }
@@ -190,8 +190,7 @@ const styles = StyleSheet.create({
   cateIcon: {
     width: Util.px2dp(32),
     height: Util.px2dp(32),
-    marginHorizontal: Util.px2dp(22),
-    backgroundColor: '#80de74'
+    marginHorizontal: Util.px2dp(22)
   },
   arrowR: {
     width: Util.px2dp(25),

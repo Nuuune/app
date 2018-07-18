@@ -93,6 +93,19 @@ export default class ChatScreen extends React.Component {
         setTimeout(()=> rctx.onRefreshDone(), 3000);
     }
 
+    getTag = (name) => {
+      switch (name) {
+        case '签':
+          return require('../resource/images/tag3.png');
+        case '薪':
+          return require('../resource/images/tag1.png');
+        case '勤':
+          return require('../resource/images/tag2.png');
+        default:
+          return require('../resource/images/tag2.png');
+      }
+    }
+
     render() {
         return (
           <HomeFrame
@@ -108,8 +121,7 @@ export default class ChatScreen extends React.Component {
                 borderTopRightRadius: Util.px2dp(22)}] : styles.cardContainer}>
                     <View style={styles.cardTitle}>
                       <View style={styles.cardIcon}>
-                        <View style={styles.cardIconImg}></View>
-                        <Text style={styles.cardIconFont}>{item.stitle}</Text>
+                        <Image source={this.getTag(item.stitle)} style={styles.cardIconImg}/>
                       </View>
                       <View style={styles.cardtt}>
                         <Text style={{fontSize: Util.px2dp(26), color: '#303030'}}>{item.title}</Text>
@@ -175,8 +187,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       width: Util.px2dp(43),
       height: Util.px2dp(46),
-      left: Util.px2dp(45),
-      backgroundColor: '#b3115c'
+      left: Util.px2dp(45)
     },
     cardIconFont: {
       width: Util.px2dp(43),

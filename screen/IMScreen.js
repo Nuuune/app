@@ -145,9 +145,6 @@ export default class IMScreen extends React.Component {
     const {text, onSend, onToggleTool} = props;
     return (
       <View style={[styles.sendBox, {marginBottom: Util.px2dp(6)}]}>
-        <TouchableOpacity style={styles.actionBtn}>
-          <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
-        </TouchableOpacity>
         {
           text.trim().length > 0 ?
           <TouchableOpacity
@@ -391,7 +388,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     sendBox: {
-      width: Util.px2dp(128),
+      width: Util.px2dp(74),
       height: Util.px2dp(56),
       flexDirection: 'row',
       alignItems: 'center',
