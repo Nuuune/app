@@ -1,13 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Slider, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Slider } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-
-import Util from '../Util';
-
-import FIcon from 'react-native-vector-icons/Feather';
-
-const wh = Dimensions.get('window').height;
-const ww = Dimensions.get('window').width;
 
 const landmarkSize = 2;
 
@@ -29,24 +22,20 @@ const wbOrder = {
 
 export default class CustomCamera extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      flash: 'off',
-      zoom: 0,
-      autoFocus: 'on',
-      depth: 0,
-      type: 'back',
-      whiteBalance: 'auto',
-      ratio: '16:9',
-      ratios: [],
-      photoId: 1,
-      showGallery: false,
-      photos: [],
-      faces: [],
-      photoData: ''
-    }
-  }
+  state = {
+    flash: 'off',
+    zoom: 0,
+    autoFocus: 'on',
+    depth: 0,
+    type: 'back',
+    whiteBalance: 'auto',
+    ratio: '16:9',
+    ratios: [],
+    photoId: 1,
+    showGallery: false,
+    photos: [],
+    faces: [],
+  };
 
   getRatios = async function() {
     const ratios = await this.camera.getSupportedRatios();
@@ -109,26 +98,11 @@ export default class CustomCamera extends React.Component {
 
   takePicture = async function() {
     if (this.camera) {
-      this.camera.takePictureAsync({
-        width: 720,
-        base64: true,
-        quality: 0.5
-      }).then(data => {
+      this.camera.takePictureAsync().then(data => {
         console.log('data: ', data);
-        this.setState({
-          photoData: data.base64
-        })
       });
     }
   };
-
-  resetPhoto() {
-    this.props.navigation.replace('Camera')
-  }
-
-  photoOk() {
-    this.props.navigation.pop()
-  }
 
   onFacesDetected = ({ faces }) => this.setState({ faces });
   onFaceDetectionError = state => console.warn('Faces detection error:', state);
@@ -204,48 +178,6 @@ export default class CustomCamera extends React.Component {
     );
   }
 
-  renderPhoto() {
-    if(this.state.photoData) {
-      return (
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          alignItems: 'stretch',
-          justifyContent: 'flex-end',
-        }}>
-          <Image source={{uri: `data:image/png;base64,${this.state.photoData}`}} style={{
-            position: 'absolute',
-            width: ww,
-            height: wh
-          }} />
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: Util.px2dp(200),
-              position: 'relative'
-            }}>
-            <TouchableOpacity
-              style={[styles.photoBtn, {backgroundColor: '#fff'}]}
-              onPress={this.photoOk.bind(this)}
-            >
-              <Text style={{fontSize: Util.px2dp(34), color: '#0099fc'}}>确定</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.photoBtn, {position: 'absolute', left: 0, height: Util.px2dp(200)}]}
-              onPress={this.resetPhoto.bind(this)}
-            >
-              <Text style={{fontSize: Util.px2dp(34), color: '#eeeeee'}}>重拍</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )
-    }
-  }
-
   renderCamera() {
     return (
       <RNCamera
@@ -254,7 +186,6 @@ export default class CustomCamera extends React.Component {
         }}
         style={{
           flex: 1,
-          alignItems: 'center'
         }}
         type={this.state.type}
         flashMode={this.state.flash}
@@ -271,59 +202,78 @@ export default class CustomCamera extends React.Component {
       >
         <View
           style={{
-            marginTop: 38,
-            flex: 1,
-            width: '90%',
-            alignItems: 'stretch',
-            justifyContent: 'space-between',
+            flex: 0.5,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
           }}
         >
-          <View
-            style={{
-              borderLeftWidth: Util.px2dp(7),
-              borderLeftColor: '#fff',
-              flex: 0.15
-            }}>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: 'row',
-                paddingLeft: Util.px2dp(8)
-              }}>
-              <Text style={styles.time}>19:53 <Text style={styles.day}>2018.06.26 星期二</Text></Text>
-            </View>
-            <View
-              style={{
-                flex: 0.25,
-                paddingLeft: Util.px2dp(8)
-              }}>
-              <Text style={styles.des}><FIcon name="navigation" size={Util.px2dp(22)} color="#fff" /> 曹杨商务大厦·上海</Text>
-            </View>
-            <View
-              style={{
-                flex: 0.25,
-                paddingLeft: Util.px2dp(8)
-              }}>
-              <Text style={styles.des}><FIcon name="user" size={Util.px2dp(22)} color="#fff" /> 张光启</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: Util.px2dp(200)
-            }}>
-            <TouchableOpacity
-              style={[styles.photoBtn]}
-              onPress={this.takePicture.bind(this)}
-            >
-              <FIcon name="camera" size={Util.px2dp(100)} color="#fff" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={styles.flipButton} onPress={this.toggleFacing.bind(this)}>
+            <Text style={styles.flipText}> FLIP </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.flipButton} onPress={this.toggleFlash.bind(this)}>
+            <Text style={styles.flipText}> FLASH: {this.state.flash} </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.flipButton} onPress={this.toggleWB.bind(this)}>
+            <Text style={styles.flipText}> WB: {this.state.whiteBalance} </Text>
+          </TouchableOpacity>
         </View>
-
-
-        {this.renderPhoto()}
+        <View
+          style={{
+            flex: 0.4,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <Slider
+            style={{ width: 150, marginTop: 15, alignSelf: 'flex-end' }}
+            onValueChange={this.setFocusDepth.bind(this)}
+            step={0.1}
+            disabled={this.state.autoFocus === 'on'}
+          />
+        </View>
+        <View
+          style={{
+            flex: 0.1,
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <TouchableOpacity
+            style={[styles.flipButton, { flex: 0.1, alignSelf: 'flex-end' }]}
+            onPress={this.zoomIn.bind(this)}
+          >
+            <Text style={styles.flipText}> + </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.flipButton, { flex: 0.1, alignSelf: 'flex-end' }]}
+            onPress={this.zoomOut.bind(this)}
+          >
+            <Text style={styles.flipText}> - </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.flipButton, { flex: 0.25, alignSelf: 'flex-end' }]}
+            onPress={this.toggleFocus.bind(this)}
+          >
+            <Text style={styles.flipText}> AF : {this.state.autoFocus} </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.flipButton, styles.picButton, { flex: 0.3, alignSelf: 'flex-end' }]}
+            onPress={this.takePicture.bind(this)}
+          >
+            <Text style={styles.flipText}> SNAP </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.flipButton, styles.galleryButton, { flex: 0.25, alignSelf: 'flex-end' }]}
+            onPress={this.toggleView.bind(this)}
+          >
+            <Text style={styles.flipText}> Gallery </Text>
+          </TouchableOpacity>
+        </View>
+        {this.renderFaces()}
+        {this.renderLandmarks()}
       </RNCamera>
     );
   }
@@ -411,23 +361,4 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-  time: {
-    fontSize: Util.px2dp(50),
-    color: '#fff'
-  },
-  day: {
-    fontSize: Util.px2dp(22),
-    color: '#fff'
-  },
-  des: {
-    fontSize: Util.px2dp(20),
-    color: '#fff'
-  },
-  photoBtn: {
-    width: Util.px2dp(150),
-    height: Util.px2dp(150),
-    borderRadius: Util.px2dp(75),
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
 });

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
     package="com.landapp">
 
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Normal Permissions 不需要运行时注册 -->
@@ -46,7 +46,7 @@
       android:theme="@style/AppTheme">
       <meta-data
         android:name="com.amap.api.v2.apikey"
-        android:value="your amap-apikey"/>
+        android:value="your apikey"/>
         <service android:name="com.amap.api.location.APSService" >
         </service>
       <activity

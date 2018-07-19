@@ -5,6 +5,7 @@
 
 # android
 android/app/build/
+android/.gradle/
 
 # ios
 ios/

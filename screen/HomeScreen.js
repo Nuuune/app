@@ -27,6 +27,7 @@ import BookIndexScreen from './BookIndexScreen';
 import BookEditScreen from './BookEditScreen';
 import BookDetailScreen from './BookDetailScreen';
 import IMScreen from './IMScreen';
+import CustomCamera from '../component/CustomCamera';
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -49,7 +50,7 @@ const TabNavigator = createBottomTabNavigator({
         navigationOptions: {
             header: null
         }
-    }),
+    })
 }, {
     navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
@@ -119,8 +120,7 @@ const HomeStack = createStackNavigator({
     Tabs: TabNavigator,
 
     Pages1: createStackNavigator({
-        MAppBox: MAppBoxScreen,
-        Camera: CameraScreen
+        MAppBox: MAppBoxScreen
     }, {navigationOptions}),
     Pages2: createStackNavigator({
         Article: ArticleScreen,
@@ -135,6 +135,13 @@ const HomeStack = createStackNavigator({
     }),
     pages5: createStackNavigator({
       IM: IMScreen
+    }),
+    pages6: createStackNavigator({
+      Camera: CustomCamera
+    }, {
+      navigationOptions: {
+          header: null
+      }
     })
 }, {
     navigationOptions: {

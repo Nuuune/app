@@ -44,7 +44,10 @@ export default class BookScreen extends React.Component {
     _upLoadPhoto = () => {
       ImagePicker.showImagePicker({
         title: '选择头像',
-        takePhotoButtonTitle: '拍照',
+        takePhotoButtonTitle: null,
+        customButtons: [
+          {name: 'camera', title: '拍照'}
+        ],
         chooseFromLibraryButtonTitle: '相册',
         cancelButtonTitle: '取消',
         mediaType: 'photo',
@@ -53,6 +56,9 @@ export default class BookScreen extends React.Component {
         }
       }, (res) => {
         console.log('Response = ', res);
+        if (res.customButton) {
+          res.customButton === 'camera' && this.props.navigation.navigate('Camera');
+        }
       })
     }
 

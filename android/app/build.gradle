@@ -86,7 +86,7 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = false
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -94,8 +94,7 @@ def enableSeparateBuildPerCPUArchitecture = true
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.landapp"
@@ -104,7 +103,7 @@ android {
         versionCode 1
         versionName "1.0"
         manifestPlaceholders = [
-                JPUSH_APPKEY: "your APPKEY",
+                JPUSH_APPKEY: "your appKey",
                 APP_CHANNEL : "default"
         ]
 
@@ -124,10 +123,10 @@ android {
     }
     splits {
         abi {
-            reset()
             enable enableSeparateBuildPerCPUArchitecture
+            reset()
+            include 'x86', 'armeabi-v7a'
             universalApk true  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86"
         }
     }
     buildTypes {
@@ -153,6 +152,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':jcore-react-native')
     compile project(':jpush-react-native')
     compile project(':react-native-amap-geolocation')
