@@ -48,6 +48,14 @@ export default class CustomCamera extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.callback = this.props.navigation.state.params.callback;
+  }
+
+  componentWillUnmount() {
+    this.callback = null;
+  }
+
   getRatios = async function() {
     const ratios = await this.camera.getSupportedRatios();
     return ratios;
@@ -127,6 +135,8 @@ export default class CustomCamera extends React.Component {
   }
 
   photoOk() {
+    // console.log(this);
+    this.callback({data: this.state.photoData});
     this.props.navigation.pop()
   }
 

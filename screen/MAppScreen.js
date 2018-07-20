@@ -6,7 +6,7 @@ import Service from '../api/Service';
 
 const wh = Dimensions.get('window').height;
 
-export default class BookScreen extends React.Component {
+export default class MAppScreen extends React.Component {
     static navigationOptions = {
         title: '通讯录',
     };

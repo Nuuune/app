@@ -119,23 +119,30 @@ export default class MAppBoxScreen extends React.Component {
             data = JSON.parse(data);
             console.log(data);
             if (data.request === 'camera') {
-              ImagePicker.launchCamera({
-                mediaType: 'photo',
-                quality: 0.2,
-                storageOptions: {
-                  cameraRoll: true
-                }
-              }, (response)  => {
-                if(response.error) {
-                  console.log(111);
-                  Alert.alert("ImagePicker Error:", response.error);
-                } else {
-                  // 需要延时返回数据给webview 原因不详
+              this.props.navigation.navigate('Camera', {
+                callback: (response) => {
                   setTimeout(() => {
                     this._pushResult(data.id, response);
                   }, 1000);
                 }
-              });
+              })
+              // ImagePicker.launchCamera({
+              //   mediaType: 'photo',
+              //   quality: 0.2,
+              //   storageOptions: {
+              //     cameraRoll: true
+              //   }
+              // }, (response)  => {
+              //   if(response.error) {
+              //     console.log(111);
+              //     Alert.alert("ImagePicker Error:", response.error);
+              //   } else {
+              //     // 需要延时返回数据给webview 原因不详
+              //     setTimeout(() => {
+              //       this._pushResult(data.id, response);
+              //     }, 1000);
+              //   }
+              // });
             } else if (data.request === 'geo') {
                 console.log('进入geo');
                 this._getLocationAsync((location) => {

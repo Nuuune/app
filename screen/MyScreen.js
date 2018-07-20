@@ -8,7 +8,7 @@ import ImagePicker from 'react-native-image-picker';
 
 const wh = Dimensions.get('window').height;
 
-export default class BookScreen extends React.Component {
+export default class MyScreen extends React.Component {
     static navigationOptions = {
         title: '通讯录',
     };
@@ -57,7 +57,7 @@ export default class BookScreen extends React.Component {
       }, (res) => {
         console.log('Response = ', res);
         if (res.customButton) {
-          res.customButton === 'camera' && this.props.navigation.navigate('Camera');
+          res.customButton === 'camera' && this.props.navigation.navigate('Camera', {ctx: this, callback: (err) => {console.log(this)} });
         }
       })
     }
