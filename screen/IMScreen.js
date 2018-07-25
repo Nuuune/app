@@ -1,6 +1,7 @@
 import React from 'react';
 import { GiftedChat, Composer, InputToolbar } from 'react-native-gifted-chat';
 import {
+  Image,
   StatusBar,
   TouchableOpacity,
   View,
@@ -27,32 +28,32 @@ export default class IMScreen extends React.Component {
     return {
       headerTitle: person.name,
       headerStyle: {
-         backgroundColor:'white',
-         height: Util.px2dp(128),
-         paddingTop: statusH,
-         elevation: 0,
+        backgroundColor:'white',
+        height: Util.px2dp(128),
+        paddingTop: statusH,
+        elevation: 0,
       },
       headerTitleStyle: {
-         color:'#0099fc',
-         fontWeight: 'normal',
-         fontSize: Util.px2dp(32),
-         alignSelf: 'center',
-         textAlign: 'center'
+        color:'#0099fc',
+        fontWeight: 'normal',
+        fontSize: Util.px2dp(32),
+        alignSelf: 'center',
+        textAlign: 'center'
       },
       headerLeft:( // 设置左边的标签
-          <TouchableOpacity onPress={()=>{navigation.pop()}}>
-              <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
-              <View style={{flexDirection:'row',alignItems:'center',marginLeft:15}}>
-                  <FIcon name="chevron-left" size={Util.px2dp(36)} color="#0099fc" />
-              </View>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{navigation.pop()}}>
+            <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
+            <View style={{flexDirection:'row',alignItems:'center',marginLeft:15}}>
+                <FIcon name="chevron-left" size={Util.px2dp(36)} color="#0099fc" />
+            </View>
+        </TouchableOpacity>
       ),
       headerRight:( // 设置右边的标签
-          <TouchableOpacity onPress={() => {navigation.navigate('BookEdit')}}>
-              <View style={{flexDirection:'row',alignItems:'center',marginRight:15}}>
-                  <FIcon name="edit" size={Util.px2dp(36)} color="#0099fc" />
-              </View>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => {navigation.navigate('BookEdit')}}>
+            <View style={{flexDirection:'row',alignItems:'center',marginRight:15}}>
+                <FIcon name="edit" size={Util.px2dp(36)} color="#0099fc" />
+            </View>
+        </TouchableOpacity>
       )
     }
   };
@@ -62,6 +63,7 @@ export default class IMScreen extends React.Component {
     super(props);
     this.state = {
       messages: [],
+      text: '',
       keyborderH: 0,
       toolBoxShow: false,
       isLoading: false,
@@ -72,12 +74,13 @@ export default class IMScreen extends React.Component {
     this.loadEarlier = this.loadEarlier.bind(this);
     this.togTools = this.togTools.bind(this);
     this.onSend = this.onSend.bind(this);
+    this.onToolsBtn = this.onToolsBtn.bind(this);
+    this.togEmojiShow = this.togEmojiShow.bind(this);
     this.renderInputToolbar = this.renderInputToolbar.bind(this);
     this._keyboardDidShow = this._keyboardDidShow.bind(this);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this._genMessage = this._genMessage.bind(this);
-    this.onToolsBtn = this.onToolsBtn.bind(this);
-    this.togEmojiShow = this.togEmojiShow.bind(this);
+    this._onTextChange = this._onTextChange.bind(this);
   }
 
   componentDidMount() {
@@ -106,12 +109,18 @@ export default class IMScreen extends React.Component {
     })
   }
 
+  _onTextChange = (text) => {
+    console.log(text);
+    this.setState({text});
+  }
+
 
   componentWillMount() {
     const person = this.props.navigation.state.params.person;
     this.users = {
       me: {
-        _id: 1
+        _id: 1,
+        name: person.name
       }
     };
     this.setState({
@@ -129,6 +138,27 @@ export default class IMScreen extends React.Component {
         }
       ],
     })
+  }
+
+  renderAvatar(props) {
+    console.log(`renderAvatar:---------`)
+    console.log(props)
+    const { avatar, name, _id } = props.currentMessage.user;
+    console.log(`${avatar}------${name}-----${_id}`);
+    let innerView;
+    if (avatar) {
+      innerView = <Image resource={{uri: `${avatar}`}} style={styles.avatarImg} />;
+    } else if (name) {
+      innerView = <Text style={styles.avatarText}>{name[0]}</Text>;
+    } else {
+      innerView = null;
+    }
+
+    return (
+      <View style={styles.avatarWrap}>
+        {innerView}
+      </View>
+    )
   }
 
   renderInputToolbar(props) {
@@ -176,8 +206,8 @@ export default class IMScreen extends React.Component {
 
   renderActions(props) {
     return (
-      <TouchableOpacity onPress={() => {props.togEmojiShow()}} style={[styles.actionBtn, {marginBottom: Util.px2dp(6)}]}>
-        <FIcon size={Util.px2dp(32)} name='plus' color='#7a7d81' />
+      <TouchableOpacity onPress={() => {props.togEmojiShow()}} style={[styles.emojiBtn, {marginBottom: Util.px2dp(6)}]}>
+        <Image source={require("../resource/images/face.png")} style={{width: '100%', height: '100%'}} />
       </TouchableOpacity>
     );
   }
@@ -280,7 +310,8 @@ export default class IMScreen extends React.Component {
       });
     } else {
       this.setState({
-        toolBoxShow: true
+        toolBoxShow: true,
+        showEmoticons: false
       }, () => Keyboard.dismiss());
     }
   }
@@ -293,7 +324,8 @@ export default class IMScreen extends React.Component {
       });
     } else {
       this.setState({
-        showEmoticons: true
+        showEmoticons: true,
+        toolBoxShow: false
       }, () => Keyboard.dismiss());
     }
   }
@@ -305,6 +337,9 @@ export default class IMScreen extends React.Component {
   _onEmoticonPress(emojiO) {
     console.log(`emojiO:-------`);
     console.log(emojiO);
+    this.setState({
+      text: `${this.state.text}${emojiO.code}`
+    })
   }
 
   _onBackspacePress() {
@@ -312,20 +347,23 @@ export default class IMScreen extends React.Component {
   }
 
   render() {
-    const {toolBoxShow, isLoading, showEmoticons} = this.state;
+    const {toolBoxShow, isLoading, showEmoticons, messages, text} = this.state;
     console.log(showEmoticons);
     return (
       <View style={{flex: 1}}>
         <GiftedChat
           ref={(ref) => this.myChat = ref}
           placeholder=""
-          messages={this.state.messages}
+          renderAvatarOnTop={true}
+          showAvatarForEveryMessage={true}
+          showUserAvatar={true}
+          text={text}
+          onInputTextChanged={(text) => this._onTextChange(text)}
+          messages={messages}
           onSend={messages => this.onSend(messages)}
           onToggleTool={() => this.togTools()}
           togEmojiShow={() => this.togEmojiShow()}
-          user={{
-            _id: 1
-          }}
+          user={this.users.me}
           loadEarlier={!isLoading}
           onLoadEarlier={() => {this.loadEarlier()}}
           isLoadingEarlier={isLoading}
@@ -333,6 +371,7 @@ export default class IMScreen extends React.Component {
           renderActions={this.renderActions}
           renderSend={this.renderSend}
           renderComposer={this.renderComposer}
+          renderAvatar={this.renderAvatar}
         />
         {
           showEmoticons &&
@@ -414,6 +453,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center'
     },
+    emojiBtn: {
+      width: Util.px2dp(58),
+      height: Util.px2dp(58),
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     sendBox: {
       width: Util.px2dp(74),
       height: Util.px2dp(56),
@@ -429,5 +474,23 @@ const styles = StyleSheet.create({
       lineHeight: Util.px2dp(32),
       fontSize: Util.px2dp(32),
       paddingVertical: 0
+    },
+    avatarWrap: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: '#0099fc',
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'hidden'
+    },
+    avatarImg: {
+      width: 40,
+      height: 40,
+      borderRadius: 20
+    },
+    avatarText: {
+      fontSize: 20,
+      color: '#fff'
     }
 });
