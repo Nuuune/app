@@ -2,7 +2,7 @@ package com.landapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import org.reactnative.camera.RNCameraPackage;
+// import org.reactnative.camera.RNCameraPackage;
 import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -33,7 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNCameraPackage(),
+            // new RNCameraPackage(),
           new AMapGeolocationPackage(),
           new VectorIconsPackage(),
           new ImagePickerPackage(),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GiftedChat, Composer, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, Composer, InputToolbar, utils, MessageImage } from 'react-native-gifted-chat';
 import {
   Image,
   StatusBar,
@@ -81,6 +81,7 @@ export default class IMScreen extends React.Component {
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this._genMessage = this._genMessage.bind(this);
     this._onTextChange = this._onTextChange.bind(this);
+    this.renderBubble = this.renderBubble.bind(this);
   }
 
   componentDidMount() {
@@ -128,16 +129,33 @@ export default class IMScreen extends React.Component {
       messages: [
         {
           _id: 1,
-          text: 'Hello developer',
+          text: '薪资查询申请正在处理中',
           createdAt: new Date(),
           user: {
             _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
+            name: '王佳佳'
           }
         }
       ],
     })
+  }
+
+  renderBubble(props) {
+    console.log(props);
+
+    const {currentMessage, user} = props;
+    const position = utils.isSameUser({user}, currentMessage) ? 'right' : 'left';
+    const innerView = currentMessage.text ? <Text style={styles.bubbleText}>{currentMessage.text}</Text>
+                      : <MessageImage {...props} />
+
+    return (
+      <View style={{flex: 1, alignSelf: 'flex-start', maxWidth: '70%'}}>
+        <View style={bubbleStyle[position].name}><Text style={styles.bubbleName}>{currentMessage.user.name}</Text></View>
+        <View style={[bubbleStyle[position].name]}>
+          {innerView}
+        </View>
+      </View>
+    )
   }
 
   renderAvatar(props) {
@@ -147,13 +165,15 @@ export default class IMScreen extends React.Component {
     console.log(`${avatar}------${name}-----${_id}`);
     let innerView;
     if (avatar) {
-      innerView = <Image resource={{uri: `${avatar}`}} style={styles.avatarImg} />;
+      innerView = <Image source={{uri: `${avatar}`}} style={styles.avatarImg} />;
     } else if (name) {
       innerView = <Text style={styles.avatarText}>{name[0]}</Text>;
     } else {
       innerView = null;
     }
 
+    console.log(`-------------34`)
+    console.log(innerView)
     return (
       <View style={styles.avatarWrap}>
         {innerView}
@@ -372,6 +392,7 @@ export default class IMScreen extends React.Component {
           renderSend={this.renderSend}
           renderComposer={this.renderComposer}
           renderAvatar={this.renderAvatar}
+          renderBubble={this.renderBubble}
         />
         {
           showEmoticons &&
@@ -492,5 +513,36 @@ const styles = StyleSheet.create({
     avatarText: {
       fontSize: 20,
       color: '#fff'
+    },
+    bubbleName: {
+      color: '#9a9999',
+      height: 11,
+      fontSize: 12,
+      lineHeight: 12,
+      marginBottom: 11,
+    },
+    bubbleText: {
+      color: '#000',
+      padding: 10,
+      borderRadius: 12,
+      borderBottomWidth: 1,
+      borderRightWidth: 1,
+      borderBottomColor: '#d0cfcf',
+      borderRightColor: '#d0cfcf',
+      fontSize: 15,
+      backgroundColor: '#fff'
     }
 });
+
+const bubbleStyle = {
+  left: StyleSheet.create({
+    name: {
+      alignSelf: 'flex-start'
+    }
+  }),
+  right: StyleSheet.create({
+    name: {
+      alignSelf: 'flex-end'
+    }
+  })
+}

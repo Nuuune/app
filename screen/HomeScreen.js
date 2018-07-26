@@ -27,7 +27,7 @@ import BookIndexScreen from './BookIndexScreen';
 import BookEditScreen from './BookEditScreen';
 import BookDetailScreen from './BookDetailScreen';
 import IMScreen from './IMScreen';
-import CustomCamera from '../component/CustomCamera';
+// import CustomCamera from '../component/CustomCamera';
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -136,13 +136,13 @@ const HomeStack = createStackNavigator({
     pages5: createStackNavigator({
       IM: IMScreen
     }),
-    pages6: createStackNavigator({
-      Camera: CustomCamera
-    }, {
-      navigationOptions: {
-          header: null
-      }
-    })
+    // pages6: createStackNavigator({
+    //   Camera: CustomCamera
+    // }, {
+    //   navigationOptions: {
+    //       header: null
+    //   }
+    // })
 }, {
     navigationOptions: {
         header: (<StatusBar backgroundColor="transparent" translucent={true} />),

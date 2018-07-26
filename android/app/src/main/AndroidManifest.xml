@@ -46,7 +46,7 @@
       android:theme="@style/AppTheme">
       <meta-data
         android:name="com.amap.api.v2.apikey"
-        android:value="your apikey"/>
+        android:value="47ebe54870aba5971a32aa0f24d48b54"/>
         <service android:name="com.amap.api.location.APSService" >
         </service>
       <activity

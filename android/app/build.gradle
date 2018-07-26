@@ -94,7 +94,8 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.landapp"
@@ -103,7 +104,7 @@ android {
         versionCode 1
         versionName "1.0"
         manifestPlaceholders = [
-                JPUSH_APPKEY: "your appKey",
+                JPUSH_APPKEY: "f2c0d1767d93ea25dfbf26b5",
                 APP_CHANNEL : "default"
         ]
 
@@ -152,7 +153,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-camera')
+    // compile project(':react-native-camera')
     compile project(':jcore-react-native')
     compile project(':jpush-react-native')
     compile project(':react-native-amap-geolocation')
