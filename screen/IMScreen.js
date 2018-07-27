@@ -1,5 +1,5 @@
 import React from 'react';
-import { GiftedChat, Composer, InputToolbar, utils, MessageImage } from 'react-native-gifted-chat';
+import { GiftedChat, Composer, InputToolbar, utils } from 'react-native-gifted-chat';
 import {
   Image,
   StatusBar,
@@ -141,18 +141,18 @@ export default class IMScreen extends React.Component {
   }
 
   renderBubble(props) {
-    console.log(props);
 
     const {currentMessage, user} = props;
     const position = utils.isSameUser({user}, currentMessage) ? 'right' : 'left';
-    const innerView = currentMessage.text ? <Text style={styles.bubbleText}>{currentMessage.text}</Text>
-                      : <MessageImage {...props} />
 
     return (
       <View style={{flex: 1, alignSelf: 'flex-start', maxWidth: '70%'}}>
         <View style={bubbleStyle[position].name}><Text style={styles.bubbleName}>{currentMessage.user.name}</Text></View>
         <View style={[bubbleStyle[position].name]}>
-          {innerView}
+          {
+            currentMessage.text ? <Text style={styles.bubbleText}>{currentMessage.text}</Text>
+                              : <Image source={{uri: currentMessage.image}} style={styles.bubbleImage} />
+          }
         </View>
       </View>
     )
@@ -531,6 +531,13 @@ const styles = StyleSheet.create({
       borderRightColor: '#d0cfcf',
       fontSize: 15,
       backgroundColor: '#fff'
+    },
+    bubbleImage: {
+      width: 150,
+      height: 100,
+      borderRadius: 13,
+      margin: 3,
+      resizeMode: 'cover',
     }
 });
 
