@@ -1,5 +1,6 @@
 import React from 'react';
-import { GiftedChat, Composer, InputToolbar, utils } from 'react-native-gifted-chat';
+import { GiftedChat, Composer, InputToolbar, utils, MessageImage} from 'react-native-gifted-chat';
+import MyAvatar from './IM/MyAvatar';
 import {
   Image,
   StatusBar,
@@ -151,7 +152,7 @@ export default class IMScreen extends React.Component {
         <View style={[bubbleStyle[position].name]}>
           {
             currentMessage.text ? <Text style={styles.bubbleText}>{currentMessage.text}</Text>
-                              : <Image source={{uri: currentMessage.image}} style={styles.bubbleImage} />
+                              : <MessageImage {...props}/>
           }
         </View>
       </View>
@@ -159,26 +160,7 @@ export default class IMScreen extends React.Component {
   }
 
   renderAvatar(props) {
-    console.log(`renderAvatar:---------`)
-    console.log(props)
-    const { avatar, name, _id } = props.currentMessage.user;
-    console.log(`${avatar}------${name}-----${_id}`);
-    let innerView;
-    if (avatar) {
-      innerView = <Image source={{uri: `${avatar}`}} style={styles.avatarImg} />;
-    } else if (name) {
-      innerView = <Text style={styles.avatarText}>{name[0]}</Text>;
-    } else {
-      innerView = null;
-    }
-
-    console.log(`-------------34`)
-    console.log(innerView)
-    return (
-      <View style={styles.avatarWrap}>
-        {innerView}
-      </View>
-    )
+    return <MyAvatar {...props} />
   }
 
   renderInputToolbar(props) {
