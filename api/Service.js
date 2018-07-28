@@ -8,6 +8,15 @@ class Service {
         this.user = null;
         this.corpId = null;
         this.ctx = null;
+        this.device = null; // jpush registrationId
+    }
+
+    getDevice() {
+      return this.device;
+    }
+
+    setDevice(id) {
+      this.device = id;
     }
 
     updateAccessToken(token) {
