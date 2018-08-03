@@ -17,6 +17,7 @@ class Service {
 
     setDevice(id) {
       this.device = id;
+      console.log('device log in Service Class')
     }
 
     updateAccessToken(token) {
@@ -36,7 +37,7 @@ class Service {
                 return resp;
             } else {
                 Toast.hide();
-                Toast.info(resp.message);
+                Toast.info(resp.errmsg);
                 console.warn(resp);
                 this.ctx && this.ctx.props.navigation.navigate('Auth');
                 return Promise.reject(resp);
@@ -121,6 +122,20 @@ class Service {
               return Promise.reject(resp.errmsg);
             }
           })
+    }
+
+    bindPushDevice() {
+      return Api.post(`${API_URL}/api/push/online`, {deviceId: this.getDevice()}).then(resp => resp.json())
+              .then(resp => {
+                if (resp.errmsg === "ok") {
+                  console.log('推送初始化成功')
+                } else {
+                  Toast.info(`推送初始化失败:${resp.errmsg}`);
+                }
+              })
+              .catch(err => {
+                Toast.info(`推送初始化失败:${err.json()}`);
+              })
     }
 
     bindCTX(ctx) {

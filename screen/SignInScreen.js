@@ -108,6 +108,8 @@ export default class SignInScreen extends React.Component {
                   if (corps.length > 0) {
                       Service.selectCorp(corps[0].id);
                   }
+
+                  Service.bindPushDevice()
                   this.props.navigation.navigate('App');
               });
           })

@@ -24,7 +24,7 @@ export default class AuthLoadingScreen extends React.Component {
                 if (corps.length > 0) {
                     Service.selectCorp(corps[0].id);
                 }
-
+                
                 this.props.navigation.navigate('App');
             });
         } else {

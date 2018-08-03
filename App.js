@@ -61,10 +61,6 @@ export default class App extends React.Component {
     // JPushModule.jumpToPushActivity("SecondActivity");
   };
 
-  getRegistrationIdEvent = (registrationId) => {
-    console.log('Device register succeed, registrationId ' + registrationId)
-    Service.setDevice(registrationId)
-  };
 
   componentDidMount () {
     if (Platform.OS === 'android') {
@@ -76,7 +72,7 @@ export default class App extends React.Component {
           package: map.myPackageName,
           deviceId: map.myDeviceId,
           version: map.myVersion
-        })
+        }, () => console.log(this.state))
       })
       JPushModule.notifyJSDidLoad(resultCode => {
         if (resultCode === 0) {
@@ -92,7 +88,11 @@ export default class App extends React.Component {
 
     JPushModule.addReceiveOpenNotificationListener(this.openNotificationEvent)
 
-    JPushModule.addGetRegistrationIdListener(this.getRegistrationIdEvent)
+
+    JPushModule.getRegistrationID(registrationId => {
+      console.log(`registrationId:${registrationId}`)
+      Service.setDevice(registrationId)
+    })
 
     // var notification = {
     //   buildId: 1,
@@ -112,7 +112,6 @@ export default class App extends React.Component {
     JPushModule.removeReceiveCustomMsgListener(this.receiveCustomMsgEvent)
     JPushModule.removeReceiveNotificationListener(this.receiveNotificationEvent)
     JPushModule.removeReceiveOpenNotificationListener(this.openNotificationEvent)
-    JPushModule.removeGetRegistrationIdListener(this.getRegistrationIdEvent)
     console.log('Will clear all notifications')
     JPushModule.clearAllNotifications()
   }
