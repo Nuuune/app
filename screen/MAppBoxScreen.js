@@ -115,6 +115,7 @@ export default class MAppBoxScreen extends React.Component {
           distanceFilter: 20
         })
         Geolocation.addLocationListener(location => {
+          console.log(location);
           this.IosLocation = location;
         })
     }
@@ -164,21 +165,30 @@ export default class MAppBoxScreen extends React.Component {
         this.IosLocation = null;
         Geolocation.start();
 
-        if (Platform.OS === "ios") {
-          // 轮询
-          let timer = setInterval(() => {
-            if(this.IosLocation !== null) {
-              Geolocation.stop();
-              cb.call(this, this.IosLocation);
-              clearInterval(timer);
-            }
-          }, 100)
+        // if (Platform.OS === "ios") {
+        //   // 轮询
+        //   let timer = setInterval(() => {
+        //     if(this.IosLocation !== null) {
+        //       Geolocation.stop();
+        //       cb.call(this, this.IosLocation);
+        //       clearInterval(timer);
+        //     }
+        //   }, 100)
+        //
+        // } else {
+        //   let location = await Geolocation.getLastLocation();
+        //   Geolocation.stop();
+        //   cb.call(this, location);
+        // }
 
-        } else {
-          let location = await Geolocation.getLastLocation();
-          Geolocation.stop();
-          cb.call(this, location);
-        }
+        let timer = setInterval(() => {
+          if(this.IosLocation !== null) {
+            Geolocation.stop();
+            cb.call(this, this.IosLocation);
+            clearInterval(timer);
+          }
+        }, 100)
+
     };
 
     _pushResult = (id, data) => {
